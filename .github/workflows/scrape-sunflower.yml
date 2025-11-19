@@ -19,14 +19,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+          # ❌ removed cache: "npm" because we have no lockfile
 
       - name: Install dependencies
         run: npm install
+        # If your Node project is in a subfolder, add:
+        # working-directory: ./2SF_Backend
 
       - name: Run scraper & generate markdown
-        run: npm run scrape
-        # If you need env vars, uncomment and set them as repo secrets:
+        run: npm run scrape:sunflowers
+        # working-directory: ./2SF_Backend  # if needed
         # env:
         #   SOME_API_KEY: ${{ secrets.SOME_API_KEY }}
 
@@ -68,9 +70,4 @@ jobs:
 
             await github.rest.pulls.merge({
               owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber,
-              merge_method: 'squash', // or 'merge' or 'rebase'
-            });
-
-            core.info(`PR #${prNumber} merged successfully.`);
+              repo: con
