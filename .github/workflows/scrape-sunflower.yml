@@ -5,6 +5,11 @@ on:
     - cron: "0 */6 * * *" # every 6 hours UTC
   workflow_dispatch:
 
+# ✅ Needed so the action can push and open/merge PRs
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   scrape-and-pr:
     runs-on: ubuntu-latest
@@ -12,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history, safer for git operations
 
       - name: Show repo tree (debug)
         run: ls -R
@@ -30,6 +37,7 @@ jobs:
       - name: Run scraper & generate markdown
         run: npm run scrape
 
+      # Create or update a PR if there are changes
       - name: Create Pull Request with changes
         id: cpr
         uses: peter-evans/create-pull-request@v7
@@ -48,6 +56,7 @@ jobs:
             scraper
           base: main
 
+      # Auto-merge the PR if one was created/updated
       - name: Auto-merge PR
         if: steps.cpr.outputs.pull-request-number != ''
         uses: actions/github-script@v7
@@ -68,7 +77,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: prNumber,
-              merge_method: 'squash',
+              merge_method: 'squash', // or 'merge' or 'rebase'
             });
 
             core.info(`PR #${prNumber} merged successfully.`);
