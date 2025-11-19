@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "scrape": "ts-node src/scripts/scrapeAll.ts"
+    "scrape": "ts-node src/scripts/scrapeAll.ts",
+    "scrape:sunflowers": "ts-node src/scripts/scrapeAll.ts"
   },
   "keywords": [],
   "author": "",
