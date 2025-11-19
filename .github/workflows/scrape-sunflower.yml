@@ -27,7 +27,7 @@ jobs:
         # working-directory: ./2SF_Backend
 
       - name: Run scraper & generate markdown
-        run: npm run scrape:sunflowers
+        run: npm run scrape
         # working-directory: ./2SF_Backend  # if needed
         # env:
         #   SOME_API_KEY: ${{ secrets.SOME_API_KEY }}
