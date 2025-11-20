@@ -1,0 +1,65 @@
+name: Scrape sunflower offers & commit to main
+
+on:
+  schedule:
+    - cron: "0 */6 * * *" # every 6 hours UTC
+  workflow_dispatch:
+
+# Needed so the workflow can push to the repo
+permissions:
+  contents: write
+
+jobs:
+  scrape-and-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # get full history so comparisons work properly
+
+      - name: Show repo tree (debug)
+        run: ls -R
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright Chromium browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run scraper & generate markdown
+        run: npm run scrape
+
+      - name: Configure git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit changes (if any)
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Changes detected, committing..."
+            git add .
+            git commit -m "chore: update sunflower offers markdown (auto)"
+          else
+            echo "No changes to commit."
+          fi
+
+      - name: Push changes to main (if any new commits)
+        run: |
+          # Fetch remote to ensure we compare against latest main
+          git fetch origin main
+
+          # Check if our HEAD is ahead of origin/main
+          if [ -n "$(git log origin/main..HEAD)" ]; then
+            echo "New commits found, pushing to main..."
+            git push origin HEAD:main
+          else
+            echo "No new commits to push."
+          fi
