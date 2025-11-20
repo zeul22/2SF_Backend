@@ -4,6 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:nodemon": "nodemon",
+    "dev": "ts-node src/app.ts",
     "scrape": "ts-node src/scripts/scrapeAll.ts",
     "scrape:sunflowers": "ts-node src/scripts/scrapeAll.ts"
   },
@@ -13,12 +15,18 @@
   "type": "commonjs",
   "description": "",
   "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "playwright": "^1.56.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "@types/node": "^24.10.1"
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.1",
+    "nodemon": "^3.1.11"
   }
 }

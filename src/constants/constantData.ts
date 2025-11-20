@@ -1,12 +1,4 @@
-# Sunflower Offers
-
-Generated at: `2025-11-19T19:24:38.355Z`
-
-Total offers: **72**
-
-## Raw JSON
-
-```json
+export const flowerData=
 [
   {
     "id": "5f38be60-62fa-4bb4-bf69-f5e55a12319f",
@@ -801,4 +793,3 @@ Total offers: **72**
     "scrapedAt": "2025-11-19T19:24:38.336Z"
   }
 ]
-```
